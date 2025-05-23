@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modal Demo</title>
+  <style>
+    /* --- layout --------------------------------------------------------- */
+    body {
+      font-family: system-ui, sans-serif;
+      margin: 0;
+      display: flex;
+      height: 100vh;
+      align-items: center;
+      justify-content: center;
+      background: #f4f6fa;
+    }
+
+    /* --- open-modal button ---------------------------------------------- */
+    #openBtn {
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      background: #0069ff;
+      color: #fff;
+      cursor: pointer;
+    }
+    #openBtn:hover { background: #0057d4; }
+
+    /* --- modal backdrop -------------------------------------------------- */
+    .backdrop {
+      position: fixed;
+      inset: 0;                         /* top/right/bottom/left: 0 */
+      background: rgba(0,0,0,0.45);
+      display: none;                    /* hidden by default */
+      align-items: center;
+      justify-content: center;
+      z-index: 999;                     /* sit on top */
+    }
+    .backdrop.show { display: flex; }
+
+    /* --- modal window ---------------------------------------------------- */
+    .modal {
+      background: #fff;
+      width: min(90%, 460px);
+      border-radius: 0.75rem;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.18);
+      overflow: hidden;
+      animation: zoom 0.25s ease;
+    }
+    @keyframes zoom {
+      from { transform: scale(0.9); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+
+    .modal header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.25rem;
+      background: #0069ff;
+      color: #fff;
+    }
+    .modal header h2 {
+      margin: 0;
+      font-size: 1.125rem;
+      font-weight: 500;
+    }
+    .close-btn {
+      background: transparent;
+      border: none;
+      font-size: 1.25rem;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .modal .content {
+      padding: 1.25rem;
+      line-height: 1.6;
+    }
+    .modal footer {
+      display: flex;
+      justify-content: flex-end;
+      padding: 0 1.25rem 1.25rem;
+    }
+    .modal footer button {
+      padding: 0.5rem 1.25rem;
+      border: none;
+      border-radius: 0.5rem;
+      background: #0069ff;
+      color: #fff;
+      cursor: pointer;
+    }
+    .modal footer button:hover { background:#0057d4; }
+  </style>
+</head>
+<body>
+
+  <button id="openBtn">Open Modal</button>
+
+  <!-- Backdrop + Modal -->
+  <div class="backdrop" id="backdrop">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <header>
+        <h2 id="modalTitle">Modal Title</h2>
+        <button class="close-btn" aria-label="Close dialog">&times;</button>
+      </header>
+      <div class="content">
+        <p>This is a sample modal. Put any HTML here—forms, text, images, etc.</p>
+      </div>
+      <footer>
+        <button class="close-btn">Close</button>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    /* grab elements */
+    const openBtn   = document.getElementById('openBtn');
+    const backdrop  = document.getElementById('backdrop');
+    const closeBtns = backdrop.querySelectorAll('.close-btn');
+
+    /* helper functions */
+    const openModal  = () => backdrop.classList.add('show');
+    const closeModal = () => backdrop.classList.remove('show');
+
+    /* events */
+    openBtn.addEventListener('click', openModal);
+    closeBtns.forEach(btn => btn.addEventListener('click', closeModal));
+
+    /* close when clicking outside modal */
+    backdrop.addEventListener('click', e => {
+      if (e.target === backdrop) closeModal();
+    });
+
+    /* close on Esc */
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeModal();
+    });
+  </script>
+</body>
+</html>
